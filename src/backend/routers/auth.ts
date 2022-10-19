@@ -37,7 +37,8 @@ export const authRouter = createRouter()
     input: z
       .object({
         name: z.string().min(3),
-        username: z.string().min(3),
+        tckn: z.string().min(11).max(11),
+        phone: z.string().min(12),
       })
       .merge(authSchema),
     async resolve({ ctx, input }) {
@@ -45,16 +46,18 @@ export const authRouter = createRouter()
         const hashedPassword = await hash(input.password);
         const user = await ctx.prisma.user.create({
           data: {
-            username: input.username,
+            phone: input.phone,
+            tckn: input.tckn,
             name: input.name,
             email: input.email,
             password: hashedPassword,
           },
           select: {
             id: true,
-            username: true,
+            tckn: true,
             email: true,
             name: true,
+            phone: true,
           },
         });
         return { message: "Register Success", user };
