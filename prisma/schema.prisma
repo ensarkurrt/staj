@@ -13,12 +13,118 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  name      String
-  tckn      String   @unique
-  email     String   @unique
-  phone     String   @unique
-  password  String
+  id           String         @id @default(cuid())
+  name         String
+  tckn         String         @unique
+  email        String         @unique
+  phone        String         @unique
+  password     String
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @default(now())
+  BankAccount  BankAccount[]
+  Notification Notification[]
+  UserAddress  UserAddress[]
+  Card         Card[]
+  VirtualCard  VirtualCard[]
+}
+
+model UserAddress {
+  id        String  @id @default(cuid())
+  address   String
+  isDefault Boolean @default(false)
+  user      User    @relation(fields: [userId], references: [id])
+  userId    String
+
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
+}
+
+// Convert TRY To Other Currencies
+model Money {
+  id           Int          @id @default(autoincrement())
+  currencyType CurrencyType
+  // 1 TRY Equals
+  amount       Decimal      @db.Decimal(2, 2)
+}
+
+model BankAccount {
+  id      String          @id @default(cuid())
+  type    BankAccountType @default(CURRENT)
+  iban    String          @unique
+  balance Decimal         @db.Decimal(9, 2)
+  user    User            @relation(fields: [userId], references: [id])
+  userId  String
+
+  outTransfer Transfer[] @relation("outTransfer")
+  inTransfer  Transfer[] @relation("inTransfer")
+
+  deletedAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now())
+}
+
+enum BankAccountType {
+  SAVINGS
+  CURRENT
+}
+
+enum CurrencyType {
+  TRY
+  USD
+  EUR
+  GLD // gold
+}
+
+model Transfer {
+  id       String       @id @default(uuid())
+  amount   Decimal      @db.Decimal(9, 2)
+  currency CurrencyType
+  from     BankAccount  @relation("outTransfer", fields: [fromId], references: [id])
+  fromId   String
+  to       BankAccount  @relation("inTransfer", fields: [toId], references: [id])
+  toId     String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+model Card {
+  id          String        @id @default(cuid())
+  cardNo      String        @unique @db.VarChar(16)
+  cardName    String
+  cardCvv     String        @db.VarChar(3)
+  cardDate    String        @db.VarChar(5) // 12/21
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @default(now())
+  user        User          @relation(fields: [userId], references: [id])
+  userId      String
+  VirtualCard VirtualCard[]
+}
+
+model VirtualCard {
+  id             String   @id @default(cuid())
+  cardNo         String   @unique @db.VarChar(16)
+  cardName       String
+  cardCvv        String   @db.VarChar(3)
+  cardDate       String   @db.VarChar(5) // 12/21
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @default(now())
+  user           User     @relation(fields: [userId], references: [id])
+  userId         String
+  PhysicalCard   Card?    @relation(fields: [physicalCardId], references: [id])
+  physicalCardId String
+}
+
+model Notification {
+  id        String           @id @default(uuid())
+  type      NotificationType
+  message   String
+  createdAt DateTime         @default(now())
+  user      User             @relation(fields: [userId], references: [id])
+  userId    String
+}
+
+enum NotificationType {
+  OUT_TRANSFER
+  IN_TRANSFER
 }

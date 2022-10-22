@@ -5,7 +5,7 @@ import { z } from "zod";
 import { createRouter } from "../utils/router";
 
 const authSchema = z.object({
-  email: z.string(),
+  tckn: z.string().min(11).max(11),
   password: z.string(),
 });
 
@@ -22,23 +22,23 @@ export const authRouter = createRouter()
     async resolve({ ctx, input }) {
       const user: User | null = await ctx.prisma.user.findFirst({
         where: {
-          email: input.email,
+          tckn: input.tckn,
         },
       });
 
-      if (!user) throw new Error("User credentials are invalid");
+      if (!user) throw new Error("Giriş bilgileri hatalı");
       const isEuqal = await compare(input.password, user.password);
-      if (!isEuqal) throw new Error("User credentials are invalid");
+      if (!isEuqal) throw new Error("Giriş bilgileri hatalı");
       exclude(user, "password");
-      return { message: "Login Success", user };
+      return { message: "Giriş Başarılı", user };
     },
   })
   .mutation("register", {
     input: z
       .object({
         name: z.string().min(3),
-        tckn: z.string().min(11).max(11),
-        phone: z.string().min(12),
+        email: z.string().email(),
+        phone: z.string().min(12).max(12),
       })
       .merge(authSchema),
     async resolve({ ctx, input }) {
@@ -60,10 +60,10 @@ export const authRouter = createRouter()
             phone: true,
           },
         });
-        return { message: "Register Success", user };
+        return { message: "Kayıt Başarılı!", user };
       } catch (error) {
         if (error instanceof PrismaClientKnownRequestError) {
-          if (error.code === "P2002") throw new Error("User already exists");
+          if (error.code === "P2002") throw new Error("Bu Kullanıcı Zaten Kayıtlı!");
           else throw error;
         }
         throw error;
