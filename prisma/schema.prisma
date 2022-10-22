@@ -49,12 +49,13 @@ model Money {
 }
 
 model BankAccount {
-  id      String          @id @default(cuid())
-  type    BankAccountType @default(CURRENT)
-  iban    String          @unique
-  balance Decimal         @db.Decimal(9, 2)
-  user    User            @relation(fields: [userId], references: [id])
-  userId  String
+  id       String          @id @default(cuid())
+  type     BankAccountType @default(CURRENT)
+  iban     String          @unique
+  currency CurrencyType    @default(TRY)
+  balance  Decimal         @db.Decimal(9, 2)
+  user     User            @relation(fields: [userId], references: [id])
+  userId   String
 
   outTransfer Transfer[] @relation("outTransfer")
   inTransfer  Transfer[] @relation("inTransfer")
