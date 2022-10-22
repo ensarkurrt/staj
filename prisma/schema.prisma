@@ -13,12 +13,13 @@ datasource db {
 }
 
 model User {
-  id           String         @id @default(cuid())
-  name         String
-  tckn         String         @unique
-  email        String         @unique
-  phone        String         @unique
-  password     String
+  id       String @id @default(cuid())
+  name     String
+  tckn     String @unique
+  email    String @unique
+  phone    String @unique
+  password String
+
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @default(now())
   BankAccount  BankAccount[]

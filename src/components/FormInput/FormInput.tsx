@@ -2,7 +2,6 @@ import { TextField, TextFieldProps } from "@mui/material";
 import { FC } from "react";
 import { useFormContext } from "react-hook-form";
 
-// 👇 Type of Props the FormInput will receive
 type FormInputProps = {
   name: string;
   minLength?: number;
@@ -10,8 +9,6 @@ type FormInputProps = {
 } & TextFieldProps;
 
 const FormInput: FC<FormInputProps> = ({ name, minLength, maxLength, ...otherProps }) => {
-  // 👇 Utilizing useFormContext to have access to the form Context
-
   const {
     register,
     formState: { errors },

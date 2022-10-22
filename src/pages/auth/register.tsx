@@ -1,10 +1,14 @@
 import FormInput from "@/components/FormInput/FormInput";
+import SessionService from "@/services/auth/SessionService";
+import { trpc } from "@/utils/trpc";
 import styled from "@emotion/styled";
 
 import LoadingButton from "@mui/lab/LoadingButton";
 import { Box, Container, Grid, Link, Link as MuiLink, Stack, Typography } from "@mui/material";
+import { useRouter } from "next/router";
 import { FC } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 // 👇 Styled React Route Dom Link Component
 export const LinkItem = styled(Link)`
@@ -45,8 +49,27 @@ type Inputs = {
 };
 
 const RegisterPage: FC = () => {
+  const router = useRouter();
+  const mutation = trpc.useMutation(["auth.register"]);
   const methods = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    try {
+      const response = await mutation.mutateAsync({
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        tckn: data.tckn,
+        password: data.password,
+      });
+      toast.success(response.message);
+      await new SessionService().set(response.user);
+      await router.push("/");
+    } catch (error: Error | any) {
+      if (error instanceof Error && error != undefined) {
+        toast.error(error.message);
+      }
+    }
+  };
   return (
     <Container maxWidth={false} sx={{ height: "100vh", backgroundColor: { xs: "#fff", md: "#f4f4f4" } }}>
       <Grid container justifyContent="center" alignItems="center" sx={{ width: "100%", height: "100%" }}>

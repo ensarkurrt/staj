@@ -2,12 +2,12 @@ import { jwtVerify } from "jose";
 import { NextRequest, NextResponse } from "next/server";
 
 export default async function middleware(req: NextRequest) {
-  /* const { cookies, url } = req;
+  const { cookies, url } = req;
   if (!url.includes("_next")) {
     const jwt = cookies.get(process.env.NEXT_PUBLIC_SESSION_COOKIE_NAME ?? "_session");
     if (!url.includes("/auth")) return await AuthGuard(jwt);
     else return await AuthLoginGuard(jwt);
-  } */
+  }
   return NextResponse.next();
 }
 

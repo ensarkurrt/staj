@@ -1,7 +1,6 @@
 import SessionService from "@/services/auth/SessionService";
-
+import { User } from "@prisma/client";
 import { createContext, FC, useCallback, useContext, useMemo, useReducer } from "react";
-import {User} from "@prisma/client";
 
 interface AuthPayload {
   user: User | null;
@@ -9,7 +8,7 @@ interface AuthPayload {
 
 interface AuthActions {
   login: (user: User) => void;
-  register: () => void;
+  register: (user: User) => void;
 }
 
 type AuthContextType = AuthPayload & { actions: AuthActions };
@@ -37,6 +36,7 @@ type AuthAction =
     }
   | {
       type: "register";
+      user: User;
     };
 
 const reducer = (state: AuthPayload, action: AuthAction) => {
@@ -47,6 +47,12 @@ const reducer = (state: AuthPayload, action: AuthAction) => {
         user: action.user,
       };
     case "login":
+      return {
+        ...state,
+        user: action.user,
+      };
+
+    case "register":
       return {
         ...state,
         user: action.user,
@@ -78,7 +84,7 @@ export const AuthContextManager: FC<Props> = ({ children }: Props) => {
     const service = new SessionService();
     service
       .getUser()
-      .then((user: User) => {
+      .then((user) => {
         if (user != undefined) dispatch({ type: "set", user });
       })
       .catch(() => {
@@ -92,8 +98,8 @@ export const AuthContextManager: FC<Props> = ({ children }: Props) => {
     dispatch({ type: "login", user });
   }, []);
 
-  const register = useCallback(() => {
-    /* dispatch({ type: "remove", id }); */
+  const register = useCallback((user: User) => {
+    dispatch({ type: "register", user });
   }, []);
 
   const actions = useMemo(() => {

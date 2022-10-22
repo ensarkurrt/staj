@@ -5,8 +5,11 @@ import { z } from "zod";
 import { createRouter } from "../utils/router";
 
 const authSchema = z.object({
-  tckn: z.string().min(11).max(11),
-  password: z.string(),
+  tckn: z
+    .string()
+    .min(11, "Kimlik Numarası minimum 11 karakter uzunluğunda olmalıdır!")
+    .max(11, "Kimlik Numarası maksimum 11 karakter uzunluğunda olmalıdır!"),
+  password: z.string().min(6, "Şifre minimum 6 karakter uzunluğunda olmalıdır!"),
 });
 
 function exclude<User, Key extends keyof User>(user: User, ...keys: Key[]): Omit<User, Key> {
@@ -36,9 +39,9 @@ export const authRouter = createRouter()
   .mutation("register", {
     input: z
       .object({
-        name: z.string().min(3),
-        email: z.string().email(),
-        phone: z.string().min(12).max(12),
+        name: z.string().min(3,'İsim minimum 3 karakter uzunluğunda olmalıdır!'),
+        email: z.string().email('Lütfen doğru bir mail giriniz!').min(5),
+        phone: z.string().min(11).max(11),
       })
       .merge(authSchema),
     async resolve({ ctx, input }) {
@@ -60,6 +63,7 @@ export const authRouter = createRouter()
             phone: true,
           },
         });
+
         return { message: "Kayıt Başarılı!", user };
       } catch (error) {
         if (error instanceof PrismaClientKnownRequestError) {
