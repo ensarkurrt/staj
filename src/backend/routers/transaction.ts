@@ -68,6 +68,8 @@ export const transactionRouter = createRouter().mutation("create", {
                 currency: account.currency,
                 convertedAmount: amount,
                 toName: input.name,
+                fromAfterBalance: account.balance.minus(input.amount),
+                toAfterBalance: toAccount.balance.plus(amount),
             },
         });
 
