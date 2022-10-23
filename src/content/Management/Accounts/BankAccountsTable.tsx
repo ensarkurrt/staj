@@ -16,8 +16,8 @@ import { FC } from "react";
 
 import Label from "@/components/Label";
 import { Visibility } from "@mui/icons-material";
-import DeleteTwoToneIcon from "@mui/icons-material/DeleteTwoTone";
-import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
+import SendIcon from '@mui/icons-material/Send';
+import HistoryIcon from '@mui/icons-material/History';
 import { BankAccount, BankAccountType } from "@prisma/client";
 
 interface BankAccountsTableProps {
@@ -59,76 +59,77 @@ const BankAccountsTable: FC<BankAccountsTableProps> = ({ bankAccounts }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {bankAccounts.map((account) => {
-              return (
-                <TableRow hover key={account.id}>
-                  <TableCell>
-                    <Typography variant="body1" fontWeight="bold" color="text.primary" gutterBottom noWrap>
-                      {`${getAccountTypeString(account.type)} Hesap`}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary" noWrap>
-                      {`${account.currency} Hesabı`}
-                    </Typography>
-                  </TableCell>
+            {bankAccounts.length > 0 &&
+              bankAccounts.map((account) => {
+                return (
+                  <TableRow hover key={account.id}>
+                    <TableCell>
+                      <Typography variant="body1" fontWeight="bold" color="text.primary" gutterBottom noWrap>
+                        {`${getAccountTypeString(account.type)} Hesap`}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary" noWrap>
+                        {`${account.currency} Hesabı`}
+                      </Typography>
+                    </TableCell>
 
-                  <TableCell>
-                    <Tooltip title={account.iban} arrow>
-                      <IconButton
-                        sx={{
-                          "&:hover": {
-                            background: theme.colors.primary.lighter,
-                          },
-                          color: theme.palette.primary.main,
-                        }}
-                        color="inherit"
-                        size="small"
-                      >
-                        <Label color="info">
-                          <Visibility fontSize="small" /> IBAN Göster
-                        </Label>
-                      </IconButton>
-                    </Tooltip>
-                  </TableCell>
-                  <TableCell align="right">
-                    <Typography variant="body1" fontWeight="bold" color="text.primary" gutterBottom noWrap>
-                      {`${account.balance} ${account.currency}`}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary" noWrap>
-                      {`${account.balance} ${account.currency}`}
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="right">{getStatusLabel(account.deletedAt != null)}</TableCell>
-                  <TableCell align="right">
-                    <Tooltip title="Edit Order" arrow>
-                      <IconButton
-                        sx={{
-                          "&:hover": {
-                            background: theme.colors.primary.lighter,
-                          },
-                          color: theme.palette.primary.main,
-                        }}
-                        color="inherit"
-                        size="small"
-                      >
-                        <EditTwoToneIcon fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Delete Order" arrow>
-                      <IconButton
-                        sx={{
-                          "&:hover": { background: theme.colors.error.lighter },
-                          color: theme.palette.error.main,
-                        }}
-                        color="inherit"
-                        size="small"
-                      >
-                        <DeleteTwoToneIcon fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
+                    <TableCell>
+                      <Tooltip title={account.iban} arrow>
+                        <IconButton
+                          sx={{
+                            "&:hover": {
+                              background: theme.colors.primary.lighter,
+                            },
+                            color: theme.palette.primary.main,
+                          }}
+                          color="inherit"
+                          size="small"
+                        >
+                          <Label color="info">
+                            <Visibility fontSize="small" /> IBAN Göster
+                          </Label>
+                        </IconButton>
+                      </Tooltip>
+                    </TableCell>
+                    <TableCell align="right">
+                      <Typography variant="body1" fontWeight="bold" color="text.primary" gutterBottom noWrap>
+                        {`${account.balance} ${account.currency}`}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary" noWrap>
+                        {`${account.balance} ${account.currency}`}
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="right">{getStatusLabel(account.deletedAt != null)}</TableCell>
+                    <TableCell align="right">
+                      <Tooltip title="Hesap Özeti" arrow>
+                        <IconButton
+                          sx={{
+                            "&:hover": {
+                              background: theme.colors.primary.lighter,
+                            },
+                            color: theme.palette.primary.main,
+                          }}
+                          color="inherit"
+                          size="small"
+                        >
+                          <HistoryIcon fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Para Gönder" arrow>
+                        <IconButton
+                          sx={{
+                            "&:hover": { background: theme.colors.error.lighter },
+                            color: theme.palette.error.main,
+                          }}
+                          color="inherit"
+                          size="small"
+                        >
+                          <SendIcon fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
           </TableBody>
         </Table>
       </TableContainer>
