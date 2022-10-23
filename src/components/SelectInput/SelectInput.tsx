@@ -2,14 +2,15 @@ import { TextField, TextFieldProps } from "@mui/material";
 import { FC } from "react";
 import { useFormContext } from "react-hook-form";
 
-type FormInputProps = {
+type SelectInputProps = {
   name: string;
+  children: React.ReactNode;
   minLength?: number;
   maxLength?: number;
   mt?: number;
 } & TextFieldProps;
 
-const FormInput: FC<FormInputProps> = ({ name, minLength, maxLength, ...otherProps }) => {
+const SelectInput: FC<SelectInputProps> = ({ name, children, minLength, mt, maxLength, ...otherProps }) => {
   const {
     register,
     formState: { errors },
@@ -26,12 +27,15 @@ const FormInput: FC<FormInputProps> = ({ name, minLength, maxLength, ...otherPro
           ? { value: maxLength, message: `Bu alan maksimum ${maxLength} karakter uzunluğunda olmalıdır!` }
           : undefined,
       })}
+      select
       variant="outlined"
-      sx={{ mb: "1.5rem", mt: otherProps.mt }}
+      sx={{ mb: "1.5rem", mt: mt }}
       error={!!errors[name]}
       helperText={errors[name] ? (errors[name]?.message as unknown as string) : ""}
-    />
+    >
+      {children}
+    </TextField>
   );
 };
 
-export default FormInput;
+export default SelectInput;

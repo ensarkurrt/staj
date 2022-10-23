@@ -3,7 +3,7 @@ import { Card } from "@mui/material";
 import { BankAccount } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import RecentOrdersTable from "./RecentOrdersTable";
+import BankAccountsTable from "./BankAccountsTable";
 
 function RecentOrders() {
   const router = useRouter();
@@ -19,8 +19,8 @@ function RecentOrders() {
 
   return (
     <Card>
-      {data.isLoading && <div>Yükleniyor...</div>}
-      {accounts.length > 0 && <RecentOrdersTable bankAccounts={accounts} />}
+      {data.isLoading && <center>Yükleniyor...</center>}
+      {accounts.length > 0 && <BankAccountsTable bankAccounts={accounts} />}
     </Card>
   );
 }
