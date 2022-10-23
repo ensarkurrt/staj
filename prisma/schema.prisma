@@ -78,19 +78,21 @@ enum CurrencyType {
 }
 
 model Transfer {
-  id              String       @id @default(uuid())
-  amount          Decimal      @default(0) @db.Decimal(15, 2)
-  currency        CurrencyType
-  convertedAmount Decimal      @default(0) @db.Decimal(15, 2)
-  from            BankAccount  @relation("outTransfer", fields: [fromId], references: [id])
-  fromId          String
-  to              BankAccount  @relation("inTransfer", fields: [toId], references: [id])
-  toId            String
-  toName          String
+  id               String       @id @default(uuid())
+  amount           Decimal      @default(0) @db.Decimal(15, 2)
+  currency         CurrencyType
+  toCurrency       CurrencyType
+  convertedAmount  Decimal      @default(0) @db.Decimal(15, 2)
+  from             BankAccount  @relation("outTransfer", fields: [fromId], references: [id])
+  fromId           String
+  to               BankAccount  @relation("inTransfer", fields: [toId], references: [id])
+  toId             String
+  toName           String
+  fromName         String
   fromAfterBalance Decimal      @default(0) @db.Decimal(15, 2)
-  toAfterBalance Decimal      @default(0) @db.Decimal(15, 2)
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @default(now())
+  toAfterBalance   Decimal      @default(0) @db.Decimal(15, 2)
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @default(now())
 }
 
 model Card {
