@@ -45,7 +45,7 @@ model Money {
   id           Int          @id @default(autoincrement())
   currencyType CurrencyType
   // 1 TRY Equals
-  amount       Decimal      @db.Decimal(2, 2)
+  amount       Decimal      @db.Decimal(15, 2)
 }
 
 model BankAccount {
@@ -53,7 +53,7 @@ model BankAccount {
   type     BankAccountType @default(CURRENT)
   iban     String          @unique
   currency CurrencyType    @default(TRY)
-  balance  Decimal         @default(0) @db.Decimal(9, 2)
+  balance  Decimal         @default(0) @db.Decimal(15, 2)
   user     User            @relation(fields: [userId], references: [id])
   userId   String
 
@@ -78,16 +78,17 @@ enum CurrencyType {
 }
 
 model Transfer {
-  id       String       @id @default(uuid())
-  amount   Decimal      @db.Decimal(9, 2)
-  currency CurrencyType
-  from     BankAccount  @relation("outTransfer", fields: [fromId], references: [id])
-  fromId   String
-  to       BankAccount  @relation("inTransfer", fields: [toId], references: [id])
-  toId     String
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  id              String       @id @default(uuid())
+  amount          Decimal      @default(0) @db.Decimal(15, 2)
+  currency        CurrencyType
+  convertedAmount Decimal      @default(0) @db.Decimal(15, 2)
+  from            BankAccount  @relation("outTransfer", fields: [fromId], references: [id])
+  fromId          String
+  to              BankAccount  @relation("inTransfer", fields: [toId], references: [id])
+  toId            String
+  toName          String
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @default(now())
 }
 
 model Card {

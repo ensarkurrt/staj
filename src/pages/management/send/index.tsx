@@ -1,7 +1,6 @@
 import Footer from "@/components/Footer";
 import PageTitleWrapper from "@/components/PageTitleWrapper";
-import PageHeader from "@/content/Management/Accounts/PageHeader";
-import BankAccounts from "@/content/Management/Accounts/BankAccounts";
+import PageHeader from "@/content/Management/SendMoney/PageHeader";
 import SidebarLayout from "@/layouts/SidebarLayout";
 import { Container, Grid } from "@mui/material";
 import Head from "next/head";

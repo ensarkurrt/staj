@@ -6,17 +6,6 @@ import { useState } from "react";
 function PageHeader() {
   const { user } = useAuthContext();
 
-  const [addAccountOpen, setAddAccountOpen] = useState<boolean>(false);
-
-  const handleClickOpen = () => {
-    setAddAccountOpen(true);
-  };
-
-  const handleClose = () => {
-    setAddAccountOpen(false);
-    /* Refresh the data */
-  };
-
   return (
     <Grid container justifyContent="space-between" alignItems="center">
       <Grid item>
