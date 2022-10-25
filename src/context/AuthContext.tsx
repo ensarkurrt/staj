@@ -9,6 +9,7 @@ interface AuthPayload {
 interface AuthActions {
   login: (user: User) => void;
   register: (user: User) => void;
+  logout: () => void;
 }
 
 type AuthContextType = AuthPayload & { actions: AuthActions };
@@ -20,6 +21,7 @@ const initialContext: AuthContextType = {
   actions: {
     login: noop,
     register: noop,
+    logout: noop,
   },
 };
 
@@ -37,6 +39,9 @@ type AuthAction =
   | {
       type: "register";
       user: User;
+    }
+  | {
+      type: "logout";
     };
 
 const reducer = (state: AuthPayload, action: AuthAction) => {
@@ -56,6 +61,11 @@ const reducer = (state: AuthPayload, action: AuthAction) => {
       return {
         ...state,
         user: action.user,
+      };
+    case "logout":
+      return {
+        ...state,
+        user: null,
       };
     /*
     case "remove":
@@ -102,9 +112,13 @@ export const AuthContextManager: FC<Props> = ({ children }: Props) => {
     dispatch({ type: "register", user });
   }, []);
 
+  const logout = useCallback(() => {
+    dispatch({ type: "logout" });
+  }, []);
+
   const actions = useMemo(() => {
-    return { login, register };
-  }, [login, register]);
+    return { login, register, logout };
+  }, [login, register, logout]);
 
   const api: AuthContextType = {
     user: state.user,

@@ -39,8 +39,8 @@ export const authRouter = createRouter()
   .mutation("register", {
     input: z
       .object({
-        name: z.string().min(3,'İsim minimum 3 karakter uzunluğunda olmalıdır!'),
-        email: z.string().email('Lütfen doğru bir mail giriniz!').min(5),
+        name: z.string().min(3, "İsim minimum 3 karakter uzunluğunda olmalıdır!"),
+        email: z.string().email("Lütfen doğru bir mail giriniz!").min(5),
         phone: z.string().min(11).max(11),
       })
       .merge(authSchema),
