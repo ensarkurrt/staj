@@ -2,14 +2,13 @@ import { useRouter } from "next/router";
 import { useContext } from "react";
 
 import { SidebarContext } from "@/context/SidebarContext";
+import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
 import { alpha, Box, Button, List, ListItem, ListSubheader, styled } from "@mui/material";
 import NextLink from "next/link";
-import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 
 import DesignServicesTwoToneIcon from "@mui/icons-material/DesignServicesTwoTone";
 
 import TableChartTwoToneIcon from "@mui/icons-material/TableChartTwoTone";
-
 
 const MenuWrapper = styled(Box)(
   ({ theme }) => `
@@ -205,22 +204,33 @@ function SidebarMenu() {
               <ListItem component="div">
                 <NextLink href="/management/send" passHref>
                   <Button
-                      className={currentRoute === "/management/send" ? "active" : ""}
-                      disableRipple
-                      component="a"
-                      onClick={closeSidebar}
-                      startIcon={<SendOutlinedIcon />}
+                    className={currentRoute === "/management/send" ? "active" : ""}
+                    disableRipple
+                    component="a"
+                    onClick={closeSidebar}
+                    startIcon={<SendOutlinedIcon />}
                   >
                     Para Gönder
+                  </Button>
+                </NextLink>
+              </ListItem>
+
+              <ListItem component="div">
+                <NextLink href="/management/pay" passHref>
+                  <Button
+                    className={currentRoute === "/management/pay" ? "active" : ""}
+                    disableRipple
+                    component="a"
+                    onClick={closeSidebar}
+                    startIcon={<SendOutlinedIcon />}
+                  >
+                    Fatura Öde
                   </Button>
                 </NextLink>
               </ListItem>
             </List>
           </SubMenuWrapper>
         </List>
-
-
-
       </MenuWrapper>
     </>
   );

@@ -7,6 +7,7 @@ export const transactionRouter = createRouter()
     input: z.object({
       amount: z.number().positive(),
       accountId: z.string(),
+      description: z.string().optional(),
       toIban: z.string().min(26).max(26),
       name: z.string().min(1).max(255),
     }),
@@ -71,6 +72,7 @@ export const transactionRouter = createRouter()
           toCurrency: toAccount.currency,
           toName: input.name,
           fromName: user!.name,
+          description: input.description ?? user!.name + " tarafından gönderildi.",
           fromAfterBalance: account.balance.minus(input.amount),
           toAfterBalance: toAccount.balance.plus(amount),
         },

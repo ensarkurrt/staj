@@ -77,7 +77,7 @@ function Sidebar() {
             size="small"
             fullWidth
           >
-            Upgrade to PRO
+            Ensar KURT Staj Projesi
           </Button>
         </Box>
       </SidebarWrapper>

@@ -89,6 +89,7 @@ model Transfer {
   toId             String
   toName           String
   fromName         String
+  description      String       @default("Para Transferi")
   fromAfterBalance Decimal      @default(0) @db.Decimal(15, 2)
   toAfterBalance   Decimal      @default(0) @db.Decimal(15, 2)
   createdAt        DateTime     @default(now())
