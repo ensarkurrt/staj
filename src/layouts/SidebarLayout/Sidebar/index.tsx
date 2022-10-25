@@ -69,12 +69,12 @@ function Sidebar() {
         />
         <Box p={2}>
           <Button
-            href="https://bloomui.com"
-            target="_blank"
             rel="noopener noreferrer"
             variant="contained"
             color="success"
             size="small"
+            href="#"
+            onClick={(event) => event.preventDefault()}
             fullWidth
           >
             Ensar KURT Staj Projesi

@@ -37,9 +37,7 @@ export const accountRouter = createRouter()
     input: z.object({
       currency: z
         .string()
-        .refine((v) =>
-          [CurrencyType.EUR, CurrencyType.GLD, CurrencyType.TRY, CurrencyType.USD].includes(v.toUpperCase() as any)
-        ),
+        .refine((v) => [CurrencyType.EUR, CurrencyType.TRY, CurrencyType.USD].includes(v.toUpperCase() as any)),
       type: z
         .string()
         .refine((v) => [BankAccountType.CURRENT, BankAccountType.SAVINGS].includes(v.toUpperCase() as any)),

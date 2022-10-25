@@ -33,8 +33,7 @@ function PayBillContainer() {
       }
       const _accounts = data.data.accounts
         .filter((account) => account.deletedAt == null)
-        .filter((account) => account.type == BankAccountType.CURRENT)
-        .filter((account) => account.currency != CurrencyType.GLD);
+        .filter((account) => account.type == BankAccountType.CURRENT);
 
       setAccounts(_accounts);
 
@@ -79,7 +78,7 @@ function PayBillContainer() {
       });
       toast.success(response.message);
       setTimeout(() => {
-        router.push("/management/accounts");
+        router.push("/management/accounts").then(() => router.reload());
       }, 3000);
     } catch (error: Error | any) {
       if (error instanceof TRPCClientError) {

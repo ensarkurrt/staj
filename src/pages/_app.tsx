@@ -28,6 +28,7 @@ import "nprogress/nprogress.css";
 
 import type { ReactElement, ReactNode } from "react";
 
+import LoadingLayout from "@/layouts/BaseLayout/LoadingLayout";
 import type { NextPage } from "next";
 import "nprogress/nprogress.css";
 
@@ -47,27 +48,31 @@ function MyApp(props: TokyoAppProps) {
 
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
   const getLayout = Component.getLayout ?? ((page) => page);
+  nProgress.configure({ showSpinner: false });
 
   Router.events.on("routeChangeStart", nProgress.start);
   Router.events.on("routeChangeError", nProgress.done);
   Router.events.on("routeChangeComplete", nProgress.done);
+
   return (
     <AuthContextManager>
-      <CacheProvider value={emotionCache}>
-        <Toaster position={"top-right"} />
-        <Head>
-          <title>Tokyo Free White NextJS Typescript Admin Dashboard</title>
-          <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        </Head>
-        <SidebarProvider>
-          <ThemeProvider>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <CssBaseline />
-              {getLayout(<Component {...pageProps} />)}
-            </LocalizationProvider>
-          </ThemeProvider>
-        </SidebarProvider>
-      </CacheProvider>
+      <LoadingLayout>
+        <CacheProvider value={emotionCache}>
+          <Toaster position={"top-right"} />
+          <Head>
+            <title>Banka Simülasyonu</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+          </Head>
+          <SidebarProvider>
+            <ThemeProvider>
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <CssBaseline />
+                {getLayout(<Component {...pageProps} />)}
+              </LocalizationProvider>
+            </ThemeProvider>
+          </SidebarProvider>
+        </CacheProvider>
+      </LoadingLayout>
     </AuthContextManager>
   );
 }
@@ -88,11 +93,11 @@ export default withTRPC<AppRouter>({
           cookie: ctx?.req?.headers.cookie,
         };
       },
-      queryClientConfig: { defaultOptions: { queries: { staleTime: 60 } } },
+      queryClientConfig: { defaultOptions: { queries: { staleTime: Infinity } } },
     };
   },
 
-  ssr: false,
+  ssr: true,
 })(MyApp);
 function getLayout(arg0: JSX.Element): import("react").ReactNode {
   throw new Error("Function not implemented.");

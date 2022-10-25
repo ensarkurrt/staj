@@ -7,7 +7,7 @@ export const transactionRouter = createRouter()
     input: z.object({
       amount: z.number().positive(),
       accountId: z.string(),
-      description: z.string().optional(),
+      description: z.string().nullable(),
       toIban: z.string().min(26).max(26),
       name: z.string().min(1).max(255),
     }),
@@ -96,7 +96,13 @@ export const transactionRouter = createRouter()
         },
       });
 
-      return { message: "Para gönderme işlemi başarılı!", transaction };
+      return {
+        message:
+          input.toIban === "TR000000000000000000000000"
+            ? "Fatura ödeme işlemi başarılı!"
+            : "Para gönderme işlemi başarılı!",
+        transaction,
+      };
     },
   })
   .query("list", {

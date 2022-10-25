@@ -31,8 +31,6 @@ const getCurrencyLabel = (currency: string) => {
       return "$";
     case "EUR":
       return "€";
-    case "GLD":
-      return "GLD";
     default:
       return "₺";
   }
@@ -56,6 +54,28 @@ const AccountHistoryTable: FC<AccountHistoryTableProps> = ({ account }) => {
       setTransactions(data.data.transactions);
     }
   }, [data.isLoading]);
+
+  const amountLabel = (transaction: Transfer) => {
+    return transaction.currency == account.currency ? (
+      <>
+        <Typography variant="body1" fontWeight="bold" color="text.primary" gutterBottom noWrap>
+          {`${transaction.amount} ${getCurrencyLabel(transaction.currency)}`}
+        </Typography>
+        <Typography variant="body2" color="text.secondary" noWrap>
+          {`${transaction.convertedAmount} ${getCurrencyLabel(transaction.toCurrency)}`}
+        </Typography>
+      </>
+    ) : (
+      <>
+        <Typography variant="body1" fontWeight="bold" color="text.primary" gutterBottom noWrap>
+          {`${transaction.convertedAmount} ${getCurrencyLabel(transaction.toCurrency)}`}
+        </Typography>
+        <Typography variant="body2" color="text.secondary" noWrap>
+          {`${transaction.amount} ${getCurrencyLabel(transaction.currency)}`}
+        </Typography>
+      </>
+    );
+  };
   return (
     <Card>
       {!data.isLoading && (
@@ -89,16 +109,7 @@ const AccountHistoryTable: FC<AccountHistoryTableProps> = ({ account }) => {
                           {transaction.toName}
                         </Typography>
                       </TableCell>
-
-                      <TableCell>
-                        <Typography variant="body1" fontWeight="bold" color="text.primary" gutterBottom noWrap>
-                          {`${transaction.amount} ${getCurrencyLabel(transaction.currency)}`}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary" noWrap>
-                          {`${transaction.convertedAmount} ${getCurrencyLabel(transaction.toCurrency)}`}
-                        </Typography>
-                      </TableCell>
-
+                      <TableCell>{amountLabel(transaction)}</TableCell>
                       <TableCell>
                         <Typography variant="body1" fontWeight="bold" color="text.primary" noWrap>
                           {`${transaction.description.substring(0, 50)} ${
