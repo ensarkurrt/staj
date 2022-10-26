@@ -125,6 +125,9 @@ function Wallets() {
               <CardContent>
                 <AvatarWrapper>
                   <Image
+                    layout="fill"
+                    width={20}
+                    height={20}
                     alt={currency.currencyType}
                     src={`/static/images/placeholders/logo/${currency.currencyType.toLowerCase()}.png`}
                   />

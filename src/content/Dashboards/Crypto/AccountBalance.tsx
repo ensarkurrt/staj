@@ -304,6 +304,9 @@ function AccountBalance() {
                       <ListItem key={account.id} disableGutters>
                         <ListItemAvatarWrapper>
                           <Image
+                            layout="fill"
+                            width={20}
+                            height={20}
                             alt={account.currency}
                             src={`/static/images/placeholders/logo/${account.currency.toLowerCase()}.png`}
                           />
