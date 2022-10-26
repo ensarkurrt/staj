@@ -1,3 +1,4 @@
+import { Chart } from "@/components/Chart";
 import { trpc } from "@/utils/trpc";
 import {
   alpha,
@@ -18,7 +19,6 @@ import {
 import { BankAccount, BankAccountType, CurrencyType, Money } from "@prisma/client";
 import type { ApexOptions } from "apexcharts";
 import { useEffect, useState } from "react";
-import { Chart } from "src/components/Chart";
 
 const AvatarSuccess = styled(Avatar)(
   ({ theme }) => `
@@ -134,6 +134,7 @@ function AccountBalance() {
 
   const [isInitialized, setIsInitialized] = useState(false);
   const [totalBalance, setTotalBalance] = useState<number>(0);
+  const [changableBalance, setChangableBalance] = useState<number>(0);
 
   const [accounts, setAccounts] = useState<BankAccount[]>([]);
   const accountsQuery = trpc.useQuery(["account.list"]);
@@ -141,8 +142,11 @@ function AccountBalance() {
   const [currencies, setCurrencies] = useState<Money[]>([]);
   const currenciesQuery = trpc.useQuery(["currency.list"]);
 
+  const [selectedCurrency, setSelectedCurrency] = useState<CurrencyType>(CurrencyType.TRY);
+
   useEffect(() => {
-    if (accountsQuery.status === "success") setAccounts(accountsQuery.data.accounts);
+    if (accountsQuery.status === "success")
+      setAccounts(accountsQuery.data.accounts.filter((x) => (x.balance as unknown as number) > 0));
   }, [accountsQuery.isLoading]);
 
   useEffect(() => {
@@ -182,6 +186,7 @@ function AccountBalance() {
     });
 
     setTotalBalance(addingBalance);
+    setChangableBalance(addingBalance);
 
     setIsInitialized(true);
   };
@@ -192,6 +197,29 @@ function AccountBalance() {
         return "Cari Hesap";
       case BankAccountType.SAVINGS:
         return "Vadeli Hesap";
+    }
+  };
+
+  const changeCurrency = (currency: CurrencyType) => {
+    console.log(selectedCurrency, currency);
+    if (selectedCurrency === currency) return;
+    const selected = currencies.find((c) => c.currencyType === currency);
+    const calculated = totalBalance / (selected?.amount as unknown as number);
+    console.log(calculated, totalBalance, selected?.amount);
+    setChangableBalance(calculated);
+    setSelectedCurrency(currency);
+  };
+
+  const getCurrencyLabel = (currency: string) => {
+    switch (currency) {
+      case "TRY":
+        return "₺";
+      case "USD":
+        return "$";
+      case "EUR":
+        return "€";
+      default:
+        return "₺";
     }
   };
   return (
@@ -209,7 +237,7 @@ function AccountBalance() {
             </Typography>
             <Box>
               <Typography variant="h1" gutterBottom>
-                {totalBalance} ₺
+                {`${changableBalance.toFixed(2)} ${getCurrencyLabel(selectedCurrency)}`}
               </Typography>
               <Box
                 display="flex"
@@ -220,16 +248,18 @@ function AccountBalance() {
               ></Box>
             </Box>
             <Grid container spacing={3}>
-              <Grid sm item>
-                <Button fullWidth variant="outlined">
-                  Send
-                </Button>
-              </Grid>
-              <Grid sm item>
-                <Button fullWidth variant="contained">
-                  Receive
-                </Button>
-              </Grid>
+              {/* contained */}
+              {currencies.map((currency) => (
+                <Grid sm item>
+                  <Button
+                    fullWidth
+                    onClick={(e) => changeCurrency(currency.currencyType)}
+                    variant={selectedCurrency == currency.currencyType ? "contained" : "outlined"}
+                  >
+                    {currency.currencyType}
+                  </Button>
+                </Grid>
+              ))}
             </Grid>
           </Box>
         </Grid>
@@ -272,7 +302,10 @@ function AccountBalance() {
                     return (
                       <ListItem disableGutters>
                         <ListItemAvatarWrapper>
-                          <img alt="BTC" src="/static/images/placeholders/logo/bitcoin.png" />
+                          <img
+                            alt={account.currency}
+                            src={`/static/images/placeholders/logo/${account.currency.toLowerCase()}.png`}
+                          />
                         </ListItemAvatarWrapper>
                         <ListItemText
                           primary={getAccountTypeLabel(account.type)}
