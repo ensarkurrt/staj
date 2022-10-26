@@ -5,7 +5,6 @@ import BaseLayout from "src/layouts/BaseLayout";
 import Head from "next/head";
 import Link from "src/components/Link";
 
-import Logo from "src/components/LogoSign";
 import Hero from "src/content/Overview/Hero";
 
 const HeaderWrapper = styled(Card)(
@@ -36,12 +35,11 @@ function Overview() {
       <HeaderWrapper>
         <Container maxWidth="lg">
           <Box display="flex" alignItems="center">
-            <Logo />
             <Box display="flex" alignItems="center" justifyContent="space-between" flex={1}>
               <Box />
               <Box>
                 <Button component={Link} href="/dashboards/crypto" variant="contained" sx={{ ml: 2 }}>
-                  Live Preview
+                  Uygulamaya geç
                 </Button>
               </Box>
             </Box>
@@ -51,10 +49,7 @@ function Overview() {
       <Hero />
       <Container maxWidth="lg" sx={{ mt: 8 }}>
         <Typography textAlign="center" variant="subtitle1">
-          Crafted by{" "}
-          <Link href="https://bloomui.com" target="_blank" rel="noopener noreferrer">
-            BloomUI.com
-          </Link>
+          Ensar KURT tarafından Düzce Üniversitesi Yaz Stajı Projesi olarak geliştirilmiştir.
         </Typography>
       </Container>
     </OverviewWrapper>

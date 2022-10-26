@@ -39,7 +39,7 @@ function Status404() {
   return (
     <>
       <Head>
-        <title>Status - 404</title>
+        <title>404 : Not Found</title>
       </Head>
       <MainContent>
         <TopWrapper>

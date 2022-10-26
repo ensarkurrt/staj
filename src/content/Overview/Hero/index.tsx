@@ -1,13 +1,6 @@
-import {
-  Box,
-  Button,
-  Container,
-  Grid,
-  Typography,
-  styled
-} from '@mui/material';
+import { Box, Button, Container, Grid, styled, Typography } from "@mui/material";
 
-import Link from 'src/components/Link';
+import Link from "src/components/Link";
 
 const TypographyH1 = styled(Typography)(
   ({ theme }) => `
@@ -97,93 +90,72 @@ const NextJsAvatar = styled(Box)(
 
 function Hero() {
   return (
-    <Container maxWidth="lg" sx={{ textAlign: 'center' }}>
-      <Grid
-        spacing={{ xs: 6, md: 10 }}
-        justifyContent="center"
-        alignItems="center"
-        container
-      >
+    <Container maxWidth="lg" sx={{ textAlign: "center" }}>
+      <Grid spacing={{ xs: 6, md: 10 }} justifyContent="center" alignItems="center" container>
         <Grid item md={10} lg={8} mx="auto">
           <LabelWrapper color="success">Version 1.0.0</LabelWrapper>
           <TypographyH1 sx={{ mb: 2 }} variant="h1">
-            Tokyo Free White Next.js Typescript Admin Dashboard
+            Minimalize Banka Simülasyonu
           </TypographyH1>
-          <TypographyH2
-            sx={{ lineHeight: 1.5, pb: 4 }}
-            variant="h4"
-            color="text.secondary"
-            fontWeight="normal"
-          >
-            High performance React template built with lots of powerful
-            Material-UI components across multiple product niches for fast &
-            perfect apps development processes
+          <TypographyH2 sx={{ lineHeight: 1.5, pb: 4 }} variant="h4" color="text.secondary" fontWeight="normal">
+            Bir banka uygulamasında temel olarak yer alan istenilen döviz ile hesap açma, para transferi (Havale),
+            fatura ödeme gibi işlemler yer almaktadır.
           </TypographyH2>
-          <Button
-            component={Link}
-            href="/dashboards/crypto"
-            size="large"
-            variant="contained"
-          >
-            Browse Live Preview
+          <Button component={Link} href="/dashboards/crypto" size="large" variant="contained">
+            Uygulamaya geç
           </Button>
-          <Button
-            sx={{ ml: 2 }}
-            component="a"
-            target="_blank"
-            rel="noopener"
-            href="https://bloomui.com/product/tokyo-free-black-react-nextjs-material-ui-admin-dashboard"
-            size="large"
-            variant="text"
-          >
-            Key Features
-          </Button>
+
           <Grid container spacing={3} mt={5}>
-            <Grid item md={4}>
+            <Grid item md={3}>
               <MuiAvatar>
-                <img
-                  src="/static/images/logo/material-ui.svg"
-                  alt="Material-UI"
-                />
+                <img src="/static/images/logo/planet-scale.svg" alt="Planet Scale" />
               </MuiAvatar>
               <Typography variant="h4">
                 <Box sx={{ pb: 2 }}>
-                  <b>Powered by MUI (Material-UI)</b>
+                  <b>PlanetScale (MySQL) Veritabanı</b>
                 </Box>
                 <Typography component="span" variant="subtitle2">
-                  A simple and customizable component library to build faster,
-                  beautiful, and accessible React apps.
+                  Hızlı ve güvenli veritabanı çözümü olduğunu için tercih edilmiştir.
                 </Typography>
               </Typography>
             </Grid>
-            <Grid item md={4}>
+            <Grid item md={3}>
+              <MuiAvatar>
+                <img src="/static/images/logo/prisma.svg" alt="Planet Scale" />
+              </MuiAvatar>
+              <Typography variant="h4">
+                <Box sx={{ pb: 2 }}>
+                  <b>Prisma ORM</b>
+                </Box>
+                <Typography component="span" variant="subtitle2">
+                  Veritabanı modellerinizi hızlı ve basit bir şekilde oluşturup, veritabanı işlemlerini kolaylıkla
+                  yapmanızı sağlar.
+                </Typography>
+              </Typography>
+            </Grid>
+            <Grid item md={3}>
               <NextJsAvatar>
                 <img src="/static/images/logo/next-js.svg" alt="NextJS" />
               </NextJsAvatar>
               <Typography variant="h4">
                 <Box sx={{ pb: 2 }}>
-                  <b>Built with Next.js</b>
+                  <b>Next.js ile geliştirildi</b>
                 </Box>
                 <Typography component="span" variant="subtitle2">
-                  Next.js gives you the best developer experience with all the
-                  features you need for production.
+                  Next.js, üretim için ihtiyaç duyduğunuz tüm özelliklerle size en iyi geliştirici deneyimini sunar.
                 </Typography>
               </Typography>
             </Grid>
-            <Grid item md={4}>
+            <Grid item md={3}>
               <TsAvatar>
-                <img
-                  src="/static/images/logo/typescript.svg"
-                  alt="Typescript"
-                />
+                <img src="/static/images/logo/typescript.svg" alt="Typescript" />
               </TsAvatar>
               <Typography variant="h4">
                 <Box sx={{ pb: 2 }}>
-                  <b>Built with Typescript</b>
+                  <b>Typescript ile geliştirildi</b>
                 </Box>
                 <Typography component="span" variant="subtitle2">
-                  Tokyo Free White features a modern technology stack and is
-                  built with React + Typescript.
+                  Typescript, güvenli bir şekilde JavaScript uygulamaları geliştirmenize yardımcı olur.
                 </Typography>
               </Typography>
             </Grid>
