@@ -16,7 +16,7 @@ function DashboardCrypto() {
   return (
     <>
       <Head>
-        <title>Crypto Dashboard</title>
+        <title>Hesap Özeti</title>
       </Head>
       <PageTitleWrapper>
         <PageHeader />

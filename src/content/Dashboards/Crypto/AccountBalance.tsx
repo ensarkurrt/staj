@@ -1,23 +1,24 @@
+import { trpc } from "@/utils/trpc";
 import {
+  alpha,
+  Avatar,
+  Box,
   Button,
   Card,
-  Box,
+  Divider,
   Grid,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  styled,
   Typography,
   useTheme,
-  styled,
-  Avatar,
-  Divider,
-  alpha,
-  ListItem,
-  ListItemText,
-  List,
-  ListItemAvatar
-} from '@mui/material';
-import TrendingUp from '@mui/icons-material/TrendingUp';
-import Text from 'src/components/Text';
-import { Chart } from 'src/components/Chart';
-import type { ApexOptions } from 'apexcharts';
+} from "@mui/material";
+import { BankAccount, BankAccountType, CurrencyType, Money } from "@prisma/client";
+import type { ApexOptions } from "apexcharts";
+import { useEffect, useState } from "react";
+import { Chart } from "src/components/Chart";
 
 const AvatarSuccess = styled(Avatar)(
   ({ theme }) => `
@@ -39,9 +40,7 @@ const ListItemAvatarWrapper = styled(ListItemAvatar)(
   padding: ${theme.spacing(0.5)};
   border-radius: 60px;
   background: ${
-    theme.palette.mode === 'dark'
-      ? theme.colors.alpha.trueWhite[30]
-      : alpha(theme.colors.alpha.black[100], 0.07)
+    theme.palette.mode === "dark" ? theme.colors.alpha.trueWhite[30] : alpha(theme.colors.alpha.black[100], 0.07)
   };
 
   img {
@@ -58,29 +57,33 @@ const ListItemAvatarWrapper = styled(ListItemAvatar)(
 function AccountBalance() {
   const theme = useTheme();
 
-  const chartOptions: ApexOptions = {
+  const _chartOptions: ApexOptions = {
+    title: {
+      text: "Hesap Bakiyesi (₺)",
+      align: "center",
+    },
     chart: {
-      background: 'transparent',
+      background: "transparent",
       stacked: false,
       toolbar: {
-        show: false
-      }
+        show: false,
+      },
     },
     plotOptions: {
       pie: {
         donut: {
-          size: '60%'
-        }
-      }
+          size: "60%",
+        },
+      },
     },
-    colors: ['#ff9900', '#1c81c2', '#333', '#5c6ac0'],
+    colors: ["#ff9900", "#1c81c2", "#5c6ac0"],
     dataLabels: {
       enabled: true,
       formatter: function (val) {
-        return val + '%';
+        return val + "%";
       },
       style: {
-        colors: [theme.colors.alpha.trueWhite[100]]
+        colors: [theme.colors.alpha.trueWhite[100]],
       },
       background: {
         enabled: true,
@@ -95,8 +98,8 @@ function AccountBalance() {
           left: 1,
           blur: 1,
           color: theme.colors.alpha.black[70],
-          opacity: 0.5
-        }
+          opacity: 0.5,
+        },
       },
       dropShadow: {
         enabled: true,
@@ -104,29 +107,93 @@ function AccountBalance() {
         left: 1,
         blur: 1,
         color: theme.colors.alpha.black[50],
-        opacity: 0.5
-      }
+        opacity: 0.5,
+      },
     },
     fill: {
-      opacity: 1
+      opacity: 1,
     },
-    labels: ['Bitcoin', 'Ripple', 'Cardano', 'Ethereum'],
+    labels: [],
     legend: {
       labels: {
-        colors: theme.colors.alpha.trueWhite[100]
+        colors: theme.colors.alpha.trueWhite[100],
       },
-      show: false
+      show: false,
     },
     stroke: {
-      width: 0
+      width: 0,
     },
     theme: {
-      mode: theme.palette.mode
-    }
+      mode: theme.palette.mode,
+    },
   };
 
-  const chartSeries = [10, 20, 25, 45];
+  const [chartOptions, setChartOptions] = useState<ApexOptions>(_chartOptions);
 
+  const [chartSeries, setChartSeries] = useState<number[]>([]);
+
+  const [isInitialized, setIsInitialized] = useState(false);
+  const [totalBalance, setTotalBalance] = useState<number>(0);
+
+  const [accounts, setAccounts] = useState<BankAccount[]>([]);
+  const accountsQuery = trpc.useQuery(["account.list"]);
+
+  const [currencies, setCurrencies] = useState<Money[]>([]);
+  const currenciesQuery = trpc.useQuery(["currency.list"]);
+
+  useEffect(() => {
+    if (accountsQuery.status === "success") setAccounts(accountsQuery.data.accounts);
+  }, [accountsQuery.isLoading]);
+
+  useEffect(() => {
+    if (currenciesQuery.status === "success") setCurrencies(currenciesQuery.data.currencies);
+  }, [currenciesQuery.isLoading]);
+
+  useEffect(() => {
+    if (accounts.length > 0 && !isInitialized) calculateTotal();
+  }, [accounts, currencies]);
+
+  useEffect(() => {
+    var addingSeries: number[] = [];
+    var addingLabels: string[] = [];
+    accounts.forEach((account) => {
+      var tryBalance = 0;
+      addingLabels.push(account.currency);
+      const accountCurrency = currencies.find((currency) => currency.currencyType === account.currency);
+      if (accountCurrency)
+        tryBalance = (account.balance as unknown as number) * (accountCurrency.amount as unknown as number);
+
+      const series: number = (tryBalance * 100) / totalBalance;
+      addingSeries.push(parseFloat(series.toFixed(2)));
+    });
+
+    _chartOptions.labels = addingLabels;
+    setChartOptions(_chartOptions);
+    setChartSeries(addingSeries);
+  }, [totalBalance]);
+
+  const calculateTotal = () => {
+    var addingBalance: number = 0;
+
+    accounts.forEach((account) => {
+      const accountCurrency = currencies.find((currency) => currency.currencyType === account.currency);
+      if (accountCurrency)
+        addingBalance += (account.balance as unknown as number) * (accountCurrency.amount as unknown as number);
+    });
+
+    setTotalBalance(addingBalance);
+
+    setIsInitialized(true);
+  };
+
+  const getAccountTypeLabel = (type: BankAccountType) => {
+    switch (type) {
+      case BankAccountType.CURRENT:
+        return "Cari Hesap";
+      case BankAccountType.SAVINGS:
+        return "Vadeli Hesap";
+    }
+  };
   return (
     <Card>
       <Grid spacing={0} container>
@@ -134,45 +201,23 @@ function AccountBalance() {
           <Box p={4}>
             <Typography
               sx={{
-                pb: 3
+                pb: 3,
               }}
               variant="h4"
             >
-              Account Balance
+              Hesap Bakiyesi
             </Typography>
             <Box>
               <Typography variant="h1" gutterBottom>
-                $54,584.23
-              </Typography>
-              <Typography
-                variant="h4"
-                fontWeight="normal"
-                color="text.secondary"
-              >
-                1.0045983485234 BTC
+                {totalBalance} ₺
               </Typography>
               <Box
                 display="flex"
                 sx={{
-                  py: 4
+                  py: 4,
                 }}
                 alignItems="center"
-              >
-                <AvatarSuccess
-                  sx={{
-                    mr: 2
-                  }}
-                  variant="rounded"
-                >
-                  <TrendingUp fontSize="large" />
-                </AvatarSuccess>
-                <Box>
-                  <Typography variant="h4">+ $3,594.00</Typography>
-                  <Typography variant="subtitle2" noWrap>
-                    this month
-                  </Typography>
-                </Box>
-              </Box>
+              ></Box>
             </Box>
             <Grid container spacing={3}>
               <Grid sm item>
@@ -190,7 +235,7 @@ function AccountBalance() {
         </Grid>
         <Grid
           sx={{
-            position: 'relative'
+            position: "relative",
           }}
           display="flex"
           alignItems="center"
@@ -201,72 +246,64 @@ function AccountBalance() {
           <Box
             component="span"
             sx={{
-              display: { xs: 'none', md: 'inline-block' }
+              display: { xs: "none", md: "inline-block" },
             }}
           >
             <Divider absolute orientation="vertical" />
           </Box>
           <Box py={4} pr={4} flex={1}>
             <Grid container spacing={0}>
-              <Grid
-                xs={12}
-                sm={5}
-                item
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-              >
-                <Chart
-                  height={250}
-                  options={chartOptions}
-                  series={chartSeries}
-                  type="donut"
-                />
+              <Grid xs={12} sm={5} item display="flex" justifyContent="center" alignItems="center">
+                <Chart height={250} options={chartOptions} series={chartSeries} type="donut" />
               </Grid>
               <Grid xs={12} sm={7} item display="flex" alignItems="center">
                 <List
                   disablePadding
                   sx={{
-                    width: '100%'
+                    width: "100%",
                   }}
                 >
+                  {accounts.map((account) => {
+                    const accountCurrency = currencies.find((currency) => currency.currencyType === account.currency)!;
+                    const converted =
+                      account.currency == CurrencyType.TRY
+                        ? (account.balance as unknown as number) * 1
+                        : (account.balance as unknown as number) * (accountCurrency.amount as unknown as number);
+                    return (
+                      <ListItem disableGutters>
+                        <ListItemAvatarWrapper>
+                          <img alt="BTC" src="/static/images/placeholders/logo/bitcoin.png" />
+                        </ListItemAvatarWrapper>
+                        <ListItemText
+                          primary={getAccountTypeLabel(account.type)}
+                          primaryTypographyProps={{ variant: "h5", noWrap: true }}
+                          secondary={`${account.currency}`}
+                          secondaryTypographyProps={{
+                            variant: "subtitle2",
+                            noWrap: true,
+                          }}
+                        />
+                        <Box>
+                          <Typography align="right" variant="h4" noWrap>
+                            {`${account.balance} ${account.currency} `}
+                          </Typography>
+                          <Typography align="right">{converted.toFixed(2)} TRY</Typography>
+                        </Box>
+                      </ListItem>
+                    );
+                  })}
+                  {/*
                   <ListItem disableGutters>
                     <ListItemAvatarWrapper>
-                      <img
-                        alt="BTC"
-                        src="/static/images/placeholders/logo/bitcoin.png"
-                      />
-                    </ListItemAvatarWrapper>
-                    <ListItemText
-                      primary="BTC"
-                      primaryTypographyProps={{ variant: 'h5', noWrap: true }}
-                      secondary="Bitcoin"
-                      secondaryTypographyProps={{
-                        variant: 'subtitle2',
-                        noWrap: true
-                      }}
-                    />
-                    <Box>
-                      <Typography align="right" variant="h4" noWrap>
-                        20%
-                      </Typography>
-                      <Text color="success">+2.54%</Text>
-                    </Box>
-                  </ListItem>
-                  <ListItem disableGutters>
-                    <ListItemAvatarWrapper>
-                      <img
-                        alt="XRP"
-                        src="/static/images/placeholders/logo/ripple.png"
-                      />
+                      <img alt="XRP" src="/static/images/placeholders/logo/ripple.png" />
                     </ListItemAvatarWrapper>
                     <ListItemText
                       primary="XRP"
-                      primaryTypographyProps={{ variant: 'h5', noWrap: true }}
+                      primaryTypographyProps={{ variant: "h5", noWrap: true }}
                       secondary="Ripple"
                       secondaryTypographyProps={{
-                        variant: 'subtitle2',
-                        noWrap: true
+                        variant: "subtitle2",
+                        noWrap: true,
                       }}
                     />
                     <Box>
@@ -278,18 +315,15 @@ function AccountBalance() {
                   </ListItem>
                   <ListItem disableGutters>
                     <ListItemAvatarWrapper>
-                      <img
-                        alt="ADA"
-                        src="/static/images/placeholders/logo/cardano.png"
-                      />
+                      <img alt="ADA" src="/static/images/placeholders/logo/cardano.png" />
                     </ListItemAvatarWrapper>
                     <ListItemText
                       primary="ADA"
-                      primaryTypographyProps={{ variant: 'h5', noWrap: true }}
+                      primaryTypographyProps={{ variant: "h5", noWrap: true }}
                       secondary="Cardano"
                       secondaryTypographyProps={{
-                        variant: 'subtitle2',
-                        noWrap: true
+                        variant: "subtitle2",
+                        noWrap: true,
                       }}
                     />
                     <Box>
@@ -301,18 +335,15 @@ function AccountBalance() {
                   </ListItem>
                   <ListItem disableGutters>
                     <ListItemAvatarWrapper>
-                      <img
-                        alt="ETH"
-                        src="/static/images/placeholders/logo/ethereum.png"
-                      />
+                      <img alt="ETH" src="/static/images/placeholders/logo/ethereum.png" />
                     </ListItemAvatarWrapper>
                     <ListItemText
                       primary="ETH"
-                      primaryTypographyProps={{ variant: 'h5', noWrap: true }}
+                      primaryTypographyProps={{ variant: "h5", noWrap: true }}
                       secondary="Ethereum"
                       secondaryTypographyProps={{
-                        variant: 'subtitle2',
-                        noWrap: true
+                        variant: "subtitle2",
+                        noWrap: true,
                       }}
                     />
                     <Box>
@@ -321,7 +352,7 @@ function AccountBalance() {
                       </Typography>
                       <Text color="error">-12.38%</Text>
                     </Box>
-                  </ListItem>
+                  </ListItem> */}
                 </List>
               </Grid>
             </Grid>
