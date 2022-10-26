@@ -6,7 +6,6 @@ import MenuTwoToneIcon from "@mui/icons-material/MenuTwoTone";
 import { alpha, Box, Divider, IconButton, lighten, Stack, styled, Tooltip, useTheme } from "@mui/material";
 
 import HeaderButtons from "./Buttons";
-import HeaderMenu from "./Menu";
 import HeaderUserbox from "./Userbox";
 
 const HeaderWrapper = styled(Box)(
@@ -49,9 +48,12 @@ function Header() {
               )}`,
       }}
     >
-      <Stack direction="row" divider={<Divider orientation="vertical" flexItem />} alignItems="center" spacing={2}>
-        <HeaderMenu />
-      </Stack>
+      <Stack
+        direction="row"
+        divider={<Divider orientation="vertical" flexItem />}
+        alignItems="center"
+        spacing={2}
+      ></Stack>
       <Box display="flex" alignItems="center">
         <HeaderButtons />
         <HeaderUserbox />

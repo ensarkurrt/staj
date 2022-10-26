@@ -101,7 +101,7 @@ function Hero() {
             Bir banka uygulamasında temel olarak yer alan istenilen döviz ile hesap açma, para transferi (Havale),
             fatura ödeme gibi işlemler yer almaktadır.
           </TypographyH2>
-          <Button component={Link} href="/dashboards/crypto" size="large" variant="contained">
+          <Button component={Link} href="/dashboard" size="large" variant="contained">
             Uygulamaya geç
           </Button>
 

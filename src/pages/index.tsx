@@ -38,7 +38,7 @@ function Overview() {
             <Box display="flex" alignItems="center" justifyContent="space-between" flex={1}>
               <Box />
               <Box>
-                <Button component={Link} href="/dashboards/crypto" variant="contained" sx={{ ml: 2 }}>
+                <Button component={Link} href="/dashboard" variant="contained" sx={{ ml: 2 }}>
                   Uygulamaya geç
                 </Button>
               </Box>
