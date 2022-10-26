@@ -1,6 +1,7 @@
 import { trpc } from "@/utils/trpc";
 import { alpha, Avatar, Box, Card, CardContent, Grid, styled, Typography } from "@mui/material";
 import { CurrencyType, Money } from "@prisma/client";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 const AvatarWrapper = styled(Avatar)(
@@ -115,7 +116,7 @@ function Wallets() {
       </Box>
       <Grid container spacing={3}>
         {currencies.map((currency) => (
-          <Grid xs={12} sm={6} md={3} item>
+          <Grid key={currency.id} xs={12} sm={6} md={3} item>
             <Card
               sx={{
                 px: 1,
@@ -123,7 +124,7 @@ function Wallets() {
             >
               <CardContent>
                 <AvatarWrapper>
-                  <img
+                  <Image
                     alt={currency.currencyType}
                     src={`/static/images/placeholders/logo/${currency.currencyType.toLowerCase()}.png`}
                   />

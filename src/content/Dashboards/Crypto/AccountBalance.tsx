@@ -18,6 +18,7 @@ import {
 } from "@mui/material";
 import { BankAccount, BankAccountType, CurrencyType, Money } from "@prisma/client";
 import type { ApexOptions } from "apexcharts";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 const AvatarSuccess = styled(Avatar)(
@@ -250,7 +251,7 @@ function AccountBalance() {
             <Grid container spacing={3}>
               {/* contained */}
               {currencies.map((currency) => (
-                <Grid sm item>
+                <Grid key={currency.id} sm item>
                   <Button
                     fullWidth
                     onClick={(e) => changeCurrency(currency.currencyType)}
@@ -300,9 +301,9 @@ function AccountBalance() {
                         ? (account.balance as unknown as number) * 1
                         : (account.balance as unknown as number) * (accountCurrency.amount as unknown as number);
                     return (
-                      <ListItem disableGutters>
+                      <ListItem key={account.id} disableGutters>
                         <ListItemAvatarWrapper>
-                          <img
+                          <Image
                             alt={account.currency}
                             src={`/static/images/placeholders/logo/${account.currency.toLowerCase()}.png`}
                           />
