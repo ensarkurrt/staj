@@ -24,6 +24,27 @@ async function main() {
   } */
 
   try {
+    await prisma.money.create({
+      data: {
+        amount: 18.6,
+        currencyType: CurrencyType.USD,
+      },
+    });
+
+    await prisma.money.create({
+      data: {
+        amount: 18.75,
+        currencyType: CurrencyType.EUR,
+      },
+    });
+
+    await prisma.money.create({
+      data: {
+        amount: 1,
+        currencyType: CurrencyType.TRY,
+      },
+    });
+
     const user = await prisma.user.create({
       data: {
         phone: "00000000000",
