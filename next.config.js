@@ -8,6 +8,9 @@ const nextConfig = {
     // Reference a variable that was defined in the .env.* file and make it available at Build Time
     SESSION_COOKIE_NAME: process.env.NEXT_PUBLIC_SESSION_COOKIE_NAME,
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 };
 
 module.exports = nextConfig;

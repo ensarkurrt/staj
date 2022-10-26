@@ -1,5 +1,6 @@
 import { Box, Button, Container, OutlinedInput, styled, Typography } from "@mui/material";
 import Head from "next/head";
+import Image from "next/image";
 import type { ReactElement } from "react";
 import BaseLayout from "src/layouts/BaseLayout";
 
@@ -45,14 +46,14 @@ function Status404() {
         <TopWrapper>
           <Container maxWidth="md">
             <Box textAlign="center">
-              <img alt="404" height={180} src="/static/images/status/404.svg" />
+              <Image alt="404" height={180} src="/static/images/status/404.svg" />
               <Typography variant="h2" sx={{ my: 2 }}>
                 Ulaşmaya çalıştığınız sayfa bulunamadı.
               </Typography>
             </Box>
             <Container maxWidth="sm" sx={{ textAlign: "center", mt: 1, p: 2 }}>
               <Button href="/" variant="outlined">
-                Anasayfa'ya Git
+                Anasayfa
               </Button>
             </Container>
           </Container>
