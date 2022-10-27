@@ -18,7 +18,6 @@ import {
 } from "@mui/material";
 import { BankAccount, BankAccountType, CurrencyType, Money } from "@prisma/client";
 import type { ApexOptions } from "apexcharts";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 
 const AvatarSuccess = styled(Avatar)(
@@ -287,7 +286,7 @@ function AccountBalance() {
               <Grid xs={12} sm={5} item display="flex" justifyContent="center" alignItems="center">
                 <Chart height={250} options={chartOptions} series={chartSeries} type="donut" />
               </Grid>
-              <Grid xs={12} sm={7} item display="flex" alignItems="center">
+              <Grid xs={12} sm={7} item display="flex" alignItems="top">
                 <List
                   disablePadding
                   sx={{
@@ -303,10 +302,7 @@ function AccountBalance() {
                     return (
                       <ListItem key={account.id} disableGutters>
                         <ListItemAvatarWrapper>
-                          <Image
-                            layout="fill"
-                            width={20}
-                            height={20}
+                          <img
                             alt={account.currency}
                             src={`/static/images/placeholders/logo/${account.currency.toLowerCase()}.png`}
                           />

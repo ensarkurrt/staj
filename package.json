@@ -10,7 +10,7 @@
     "prisma": "npx prisma db push",
     "seed": "npx prisma db seed",
     "dev": "next dev",
-    "build": "npx prisma db push && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
