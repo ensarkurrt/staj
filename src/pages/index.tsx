@@ -30,7 +30,7 @@ function Overview() {
   return (
     <OverviewWrapper>
       <Head>
-        <title>Tokyo Free White NextJS Typescript Admin Dashboard</title>
+        <title>Minimalize Bank Simülasyonu</title>
       </Head>
       <HeaderWrapper>
         <Container maxWidth="lg">
