@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import LoadingButton from "@mui/lab/LoadingButton";
 import { Box, Card, CardContent, CardHeader, Divider, Grid, MenuItem } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -91,7 +92,7 @@ function sendMoneyContainer() {
   return (
     <Grid item xs={12}>
       <Card>
-        <CardHeader title="Input Fields" />
+        <CardHeader title={"Para Gönder"} />
         <Divider />
         <CardContent>
           {data.isLoading && (

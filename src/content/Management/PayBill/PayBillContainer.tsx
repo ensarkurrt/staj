@@ -94,7 +94,7 @@ function PayBillContainer() {
   return (
     <Grid item xs={12}>
       <Card>
-        <CardHeader title="Input Fields" />
+        <CardHeader title={"Fatura Öde"} />
         <Divider />
         <CardContent>
           {data.isLoading && (
