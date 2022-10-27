@@ -63,7 +63,9 @@ const RegisterPage: FC = () => {
       });
       toast.success(response.message);
       await new SessionService().set(response.user);
-      await router.push("/");
+      setTimeout(async () => {
+        await router.push("/");
+      }, 2000);
     } catch (error: Error | any) {
       if (error instanceof Error && error != undefined) {
         toast.error(error.message);

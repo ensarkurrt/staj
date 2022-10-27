@@ -61,7 +61,9 @@ const LoginPage: FC = () => {
       toast.success(response.message);
       await new SessionService().set(response.user);
       login(response.user);
-      await router.push("/");
+      setTimeout(async () => {
+        await router.push("/");
+      }, 2000);
     } catch (error: Error | any) {
       if (error instanceof TRPCClientError) {
         try {
@@ -152,4 +154,3 @@ const LoginPage: FC = () => {
 };
 
 export default LoginPage;
-
