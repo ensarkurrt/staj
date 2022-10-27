@@ -76,7 +76,7 @@ function AccountBalance() {
         },
       },
     },
-    colors: ["#ff9900", "#1c81c2", "#5c6ac0"],
+    colors: [],
     dataLabels: {
       enabled: true,
       formatter: function (val) {
@@ -160,6 +160,8 @@ function AccountBalance() {
   useEffect(() => {
     var addingSeries: number[] = [];
     var addingLabels: string[] = [];
+    var addingColors: string[] = [];
+
     accounts.forEach((account) => {
       var tryBalance = 0;
       addingLabels.push(account.currency);
@@ -167,11 +169,15 @@ function AccountBalance() {
       if (accountCurrency)
         tryBalance = (account.balance as unknown as number) * (accountCurrency.amount as unknown as number);
 
-      const series: number = (tryBalance * 100) / totalBalance;
+      const series: number = parseFloat(tryBalance.toFixed(2));
       addingSeries.push(parseFloat(series.toFixed(2)));
+      if (accountCurrency?.currencyType === CurrencyType.TRY) addingColors.push("#F44336");
+      else if (accountCurrency?.currencyType === CurrencyType.USD) addingColors.push("#1c81c2");
+      else if (accountCurrency?.currencyType === CurrencyType.EUR) addingColors.push("#5c6ac0");
     });
 
     _chartOptions.labels = addingLabels;
+    _chartOptions.colors = addingColors;
     setChartOptions(_chartOptions);
     setChartSeries(addingSeries);
   }, [totalBalance]);
@@ -201,11 +207,10 @@ function AccountBalance() {
   };
 
   const changeCurrency = (currency: CurrencyType) => {
-    console.log(selectedCurrency, currency);
     if (selectedCurrency === currency) return;
     const selected = currencies.find((c) => c.currencyType === currency);
     const calculated = totalBalance / (selected?.amount as unknown as number);
-    console.log(calculated, totalBalance, selected?.amount);
+
     setChangableBalance(calculated);
     setSelectedCurrency(currency);
   };

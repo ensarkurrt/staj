@@ -4,11 +4,11 @@ import SidebarLayout from "@/layouts/SidebarLayout";
 
 import Footer from "@/components/Footer";
 import PageTitleWrapper from "@/components/PageTitleWrapper";
-import PageHeader from "@/content/Dashboards/Crypto/PageHeader";
+import PageHeader from "@/content/Dashboards/PageHeader";
 import { Container, Grid } from "@mui/material";
 
-import AccountBalance from "@/content/Dashboards/Crypto/AccountBalance";
-import Wallets from "@/content/Dashboards/Crypto/Wallets";
+import AccountBalance from "@/content/Dashboards/AccountBalance";
+import Wallets from "@/content/Dashboards/Wallets";
 
 function DashboardCrypto() {
   return (
