@@ -31,6 +31,7 @@ import type { ReactElement, ReactNode } from "react";
 import LoadingLayout from "@/layouts/BaseLayout/LoadingLayout";
 import type { NextPage } from "next";
 import "nprogress/nprogress.css";
+import { Analytics } from "@mui/icons-material";
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -68,6 +69,7 @@ function MyApp(props: TokyoAppProps) {
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <CssBaseline />
                 {getLayout(<Component {...pageProps} />)}
+                <Analytics />
               </LocalizationProvider>
             </ThemeProvider>
           </SidebarProvider>

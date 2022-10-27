@@ -30,6 +30,7 @@ specifiers:
   '@types/react': ^18.0.15
   '@types/react-dom': ^18.0.6
   '@types/styled-components': ^5.1.25
+  '@vercel/analytics': ^0.1.2
   apexcharts: 3.35.3
   autoprefixer: ^10.4.8
   axios: ^0.27.2
@@ -94,6 +95,7 @@ dependencies:
   '@types/nprogress': 0.2.0
   '@types/numeral': 2.0.2
   '@types/prop-types': 15.7.5
+  '@vercel/analytics': 0.1.2_react@18.2.0
   apexcharts: 3.35.3
   axios: 0.27.2
   bcryptjs: 2.4.3
@@ -2085,6 +2087,14 @@ packages:
       '@typescript-eslint/types': 5.40.1
       eslint-visitor-keys: 3.3.0
     dev: true
+
+  /@vercel/analytics/0.1.2_react@18.2.0:
+    resolution: {integrity: sha512-eV2XRMRQJzPcwAskfNicAwFr5+e/u76JcS2fJooWvaT9xAg/sX0RzkgRxDZXPjnRts2ErvjhoETmbnquAMBY9A==}
+    peerDependencies:
+      react: ^16.8||^17||^18
+    dependencies:
+      react: 18.2.0
+    dev: false
 
   /acorn-jsx/5.3.2_acorn@8.8.0:
     resolution: {integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==}
