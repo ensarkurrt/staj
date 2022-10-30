@@ -151,7 +151,9 @@ const RegisterPage: FC = () => {
               </Grid>
               <Grid container justifyContent="center">
                 <Stack sx={{ mt: "3rem", textAlign: "center" }}>
-                  <Typography sx={{ fontSize: "0.9rem", mb: "1rem" }}>Hesabınız var mı? Giriş Yap!</Typography>
+                  <Typography sx={{ fontSize: "0.9rem", mb: "1rem" }}>
+                    <LinkItem href="/auth/login">Hesabınız var mı? Giriş Yap!</LinkItem>
+                  </Typography>
                 </Stack>
               </Grid>
             </Grid>

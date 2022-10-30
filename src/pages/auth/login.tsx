@@ -141,7 +141,9 @@ const LoginPage: FC = () => {
               </Grid>
               <Grid container justifyContent="center">
                 <Stack sx={{ mt: "3rem", textAlign: "center" }}>
-                  <Typography sx={{ fontSize: "0.9rem", mb: "1rem" }}>Hesabınız yok mu? Kayıt Olun!</Typography>
+                  <Typography sx={{ fontSize: "0.9rem", mb: "1rem" }}>
+                    <LinkItem href="/auth/register">Hesabınız yok mu? Kayıt Olun!</LinkItem>
+                  </Typography>
                 </Stack>
               </Grid>
             </Grid>
